@@ -67,3 +67,331 @@ int main() {
 
     return 0;
 }
+3. TIME CONVERSON
+ #include <stdio.h>
+#include <string.h>
+
+void timeConversion(char* s) {
+    int hour, minute, second;
+    char period[3];
+
+    // Parse the time and the AM/PM part
+    sscanf(s, "%2d:%2d:%2d%2s", &hour, &minute, &second, period);
+
+    if (strcmp(period, "AM") == 0) {
+        if (hour == 12) hour = 0;  // 12AM -> 00
+    } else if (strcmp(period, "PM") == 0) {
+        if (hour != 12) hour += 12;  // Add 12 for PM (except 12PM)
+    }
+
+    // Print in 24-hour format
+    printf("%02d:%02d:%02d\n", hour, minute, second);
+}
+
+int main() {
+    char s[11];  // Format: hh:mm:ssAM or hh:mm:ssPM
+
+    scanf("%s", s);
+
+    timeConversion(s);
+
+    return 0;
+}
+4. Sparse Arrays
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_STR_LEN 101  // Max length of a string including null terminator
+#define MAX_N 1000       // Maximum number of strings and queries
+
+int main() {
+    int n;
+    scanf("%d", &n);
+
+    char strings[MAX_N][MAX_STR_LEN];
+
+    for (int i = 0; i < n; i++) {
+        scanf("%s", strings[i]);
+    }
+
+    int q;
+    scanf("%d", &q);
+
+    char queries[MAX_N][MAX_STR_LEN];
+
+    for (int i = 0; i < q; i++) {
+        scanf("%s", queries[i]);
+    }
+
+    for (int i = 0; i < q; i++) {
+        int count = 0;
+        for (int j = 0; j < n; j++) {
+            if (strcmp(queries[i], strings[j]) == 0) {
+                count++;
+            }
+        }
+        printf("%d\n", count);
+    }
+
+    return 0;
+}
+5. Lonely Integer
+#include <stdio.h>
+
+int lonelyinteger(int a[], int n) {
+    int result = 0;
+    for (int i = 0; i < n; i++) {
+        result ^= a[i];  // XOR each element
+    }
+    return result;
+}
+
+int main() {
+    int n;
+    scanf("%d", &n);
+
+    int a[n];
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &a[i]);
+    }
+
+    int unique = lonelyinteger(a, n);
+    printf("%d\n", unique);
+
+    return 0;
+}
+6. Flipping bits
+#include <stdio.h>
+
+unsigned int flippingBits(unsigned int n) {
+    return ~n & 0xFFFFFFFF;
+}
+
+int main() {
+    int q;
+    scanf("%d", &q);
+
+    for (int i = 0; i < q; i++) {
+        unsigned int n;
+        scanf("%u", &n);
+        printf("%u\n", flippingBits(n));
+    }
+
+    return 0;
+}
+7 .Diagonal Difference
+#include <stdio.h>
+#include <stdlib.h> // for abs()
+
+int diagonalDifference(int n, int arr[n][n]) {
+    int primarySum = 0;
+    int secondarySum = 0;
+
+    for (int i = 0; i < n; i++) {
+        primarySum += arr[i][i];           // Primary diagonal: arr[0][0], arr[1][1], ...
+        secondarySum += arr[i][n - 1 - i]; // Secondary diagonal: arr[0][n-1], arr[1][n-2], ...
+    }
+
+    return abs(primarySum - secondarySum);
+}
+
+int main() {
+    int n;
+    scanf("%d", &n);
+
+    int arr[n][n];  // Variable Length Array (VLA, C99+)
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            scanf("%d", &arr[i][j]);
+        }
+    }
+
+    int result = diagonalDifference(n, arr);
+    printf("%d\n", result);
+
+    return 0;
+}
+8. Counting Sort 1
+#include <stdio.h>
+#include <string.h>
+
+void countingSort(int arr[], int n, int freq[100]) {
+    // Initialize all elements of freq to 0
+    memset(freq, 0, 100 * sizeof(int));
+
+    // Count frequency
+    for (int i = 0; i < n; i++) {
+        freq[arr[i]]++;
+    }
+}
+
+int main() {
+    int n;
+    scanf("%d", &n);
+
+    int arr[n];
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    int freq[100];
+    countingSort(arr, n, freq);
+
+    for (int i = 0; i < 100; i++) {
+        printf("%d ", freq[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
+9.Pangrams
+#include <stdio.h>
+#include <ctype.h>  // For tolower()
+#include <string.h> // For strlen()
+
+char* pangrams(const char* s) {
+    int letters[26] = {0};  // To track each letter
+    int count = 0;
+
+    for (int i = 0; s[i] != '\0'; i++) {
+        if (isalpha(s[i])) {
+            int index = tolower(s[i]) - 'a';
+            if (letters[index] == 0) {
+                letters[index] = 1;
+                count++;
+            }
+        }
+    }
+
+    if (count == 26)
+        return "pangram";
+    else
+        return "not pangram";
+}
+
+int main() {
+    char s[1001];
+    fgets(s, sizeof(s), stdin);  // Use fgets to read the full line
+
+    // Remove newline character if present (optional but good practice)
+    s[strcspn(s, "\n")] = '\0';
+
+    printf("%s\n", pangrams(s));
+
+    return 0;
+}
+10.Permuting Two Arrays
+#include <stdio.h>
+#include <stdlib.h>
+
+// Comparison function for ascending order
+int compareAsc(const void *a, const void *b) {
+    return (*(int*)a - *(int*)b);
+}
+
+// Comparison function for descending order
+int compareDesc(const void *a, const void *b) {
+    return (*(int*)b - *(int*)a);
+}
+
+// Function to check if a valid permutation exists
+char* twoArrays(int k, int A[], int B[], int n) {
+    qsort(A, n, sizeof(int), compareAsc);
+    qsort(B, n, sizeof(int), compareDesc);
+
+    for (int i = 0; i < n; i++) {
+        if (A[i] + B[i] < k) {
+            return "NO";
+        }
+    }
+    return "YES";
+}
+
+int main() {
+    int q;
+    scanf("%d", &q);
+
+    for (int query = 0; query < q; query++) {
+        int n, k;
+        scanf("%d %d", &n, &k);
+
+        int A[n], B[n];
+
+        for (int i = 0; i < n; i++)
+            scanf("%d", &A[i]);
+
+        for (int i = 0; i < n; i++)
+            scanf("%d", &B[i]);
+
+        printf("%s\n", twoArrays(k, A, B, n));
+    }
+
+    return 0;
+}
+11. Subarray Division 1
+#include <stdio.h>
+
+int birthday(int s[], int n, int d, int m) {
+    int count = 0;
+    
+    for (int i = 0; i <= n - m; i++) {
+        int sum = 0;
+        for (int j = i; j < i + m; j++) {
+            sum += s[j];
+        }
+        if (sum == d) {
+            count++;
+        }
+    }
+
+    return count;
+}
+
+int main() {
+    int n;
+    scanf("%d", &n);
+
+    int s[n];
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &s[i]);
+    }
+
+    int d, m;
+    scanf("%d %d", &d, &m);
+
+    int result = birthday(s, n, d, m);
+    printf("%d\n", result);
+
+    return 0;
+}
+12.XOR Strings 2
+#include <stdio.h>
+
+// Function to compute XOR of two binary strings
+char* strings_xor(char *s, char *t) {
+    static char res[100];  // Result array to store the XOR string
+    int i;  // Declare i outside the loop
+    for(i = 0; s[i] != '\0'; i++) {
+        if (s[i] == t[i])
+            res[i] = '0';  // XOR: same bits = 0
+        else
+            res[i] = '1';  // XOR: different bits = 1
+    }
+    res[i] = '\0';  // Null terminate the result string
+    return res;
+}
+
+int main() {
+    char s[100], t[100];
+
+    // Read two binary strings from input
+    scanf("%s", s);
+    scanf("%s", t);
+
+    // Print the XOR result
+    printf("%s\n", strings_xor(s, t));
+
+    return 0;
+}
+
